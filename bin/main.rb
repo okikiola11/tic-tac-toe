@@ -6,6 +6,7 @@ class Game
     @player2 = 'O'
     @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
   end
+
   def welcome
     puts 'Welcome to Tic Tac Toe'
     puts 'Please Enter your name (Player 1): '
@@ -14,6 +15,7 @@ class Game
     player2 = gets.strip.upcase
     puts "#{player1} is 'X' (player1) and #{player2} is 'O' (player2)"
   end
+
   def display_board
     puts " #{@board[0]} | #{@board[1]} | #{@board[2]} "
     puts '----------- '
@@ -21,15 +23,19 @@ class Game
     puts '----------- '
     puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
   end
+
   def input_to_index(user_input)
     user_input.to_i - 1
   end
+
   def move(board, index, player)
     board[index] = player
   end
+
   def valid_move?(board, index)
     return true if index.between?(0, 8) && board[index] == ' '
   end
+
   def turn_count(board)
     counter = 0
     board.each do |spaces|
@@ -37,9 +43,11 @@ class Game
     end
     counter
   end
+
   def current_player
     turn_count(@board).even? ? @player1 : @player2
   end
+
   def user_input
     game_over = false
     display_board
@@ -72,6 +80,7 @@ class Game
       display_board
     end
   end
+
   def won?(board, player)
     if (board[0] == board[1] && board[1] == board[2]) && board.values_at(0, 1, 2).include?(player)
       true
