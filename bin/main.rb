@@ -6,6 +6,7 @@ require_relative '../lib/players.rb'
 class Game
   def initialize
     @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+    @playerz = Players.new
   end
 
   def welcome
@@ -38,22 +39,19 @@ class Game
   end
 
   def turn_count(board)
-    playerz = Players.new
     counter = 0
     board.each do |spaces|
-      counter += 1 if spaces.include?(playerz.player1) || spaces.include?(playerz.player2)
+      counter += 1 if spaces.include?(@playerz.player1) || spaces.include?(@playerz.player2)
     end
     counter
   end
 
   def current_player
-    playerz = Players.new
-    turn_count(@board).even? ? playerz.player1 : playerz.player2
+    turn_count(@board).even? ? @playerz.player1 : @playerz.player2
   end
 
   def user_input
     wins = Wins.new
-    playerz = Players.new
     game_over = false
     display_board
     until game_over == true
@@ -63,18 +61,18 @@ class Game
         puts 'Invalid move, number already taken or out of range'
       else
         move(@board, input, current_player)
-        if wins.won?(@board, playerz.player1)
+        if wins.won?(@board, @playerz.player1)
           display_board
-          puts "#{playerz.player1} won the game!"
+          puts "#{@playerz.player1} won the game!"
           return game_over = true
         elsif !@board.include?(' ')
           display_board
           puts 'It\'s a Draw!'
           return game_over = true
         end
-        if wins.won?(@board, playerz.player2)
+        if wins.won?(@board, @playerz.player2)
           display_board
-          puts "#{playerz.player2} won the game!"
+          puts "#{@playerz.player2} won the game!"
           return game_over = true
         elsif !@board.include?(' ')
           display_board
