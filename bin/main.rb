@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
-# rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
+# rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+require_relative '../lib/wins.rb'
+require_relative '../lib/players.rb'
+
 class Game
   def initialize
-    @player1 = 'X'
-    @player2 = 'O'
     @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
   end
 
@@ -37,18 +38,22 @@ class Game
   end
 
   def turn_count(board)
+    playerz = Players.new
     counter = 0
     board.each do |spaces|
-      counter += 1 if spaces.include?(@player1) || spaces.include?(@player2)
+      counter += 1 if spaces.include?(playerz.player1) || spaces.include?(playerz.player2)
     end
     counter
   end
 
   def current_player
-    turn_count(@board).even? ? @player1 : @player2
+    playerz = Players.new
+    turn_count(@board).even? ? playerz.player1 : playerz.player2
   end
 
   def user_input
+    wins = Wins.new
+    playerz = Players.new
     game_over = false
     display_board
     until game_over == true
@@ -58,18 +63,18 @@ class Game
         puts 'Invalid move, number already taken or out of range'
       else
         move(@board, input, current_player)
-        if won?(@board, @player1)
+        if wins.won?(@board, playerz.player1)
           display_board
-          puts "#{@player1} won the game!"
+          puts "#{playerz.player1} won the game!"
           return game_over = true
         elsif !@board.include?(' ')
           display_board
           puts 'It\'s a Draw!'
           return game_over = true
         end
-        if won?(@board, @player2)
+        if wins.won?(@board, playerz.player2)
           display_board
-          puts "#{@player2} won the game!"
+          puts "#{playerz.player2} won the game!"
           return game_over = true
         elsif !@board.include?(' ')
           display_board
@@ -80,28 +85,8 @@ class Game
       display_board
     end
   end
-
-  def won?(board, player)
-    if (board[0] == board[1] && board[1] == board[2]) && board.values_at(0, 1, 2).include?(player)
-      true
-    elsif (board[3] == board[4] && board[4] == board[5]) && board.values_at(3, 4, 5).include?(player)
-      true
-    elsif (board[6] == board[7] && board[7] == board[8]) && board.values_at(6, 7, 8).include?(player)
-      true
-    elsif (board[0] == board[3] && board[3] == board[6]) && board.values_at(0, 3, 6).include?(player)
-      true
-    elsif (board[1] == board[4] && board[4] == board[7]) && board.values_at(1, 4, 7).include?(player)
-      true
-    elsif (board[2] == board[5] && board[5] == board[8]) && board.values_at(2, 5, 8).include?(player)
-      true
-    elsif (board[0] == board[4] && board[4] == board[8]) && board.values_at(0, 4, 8).include?(player)
-      true
-    elsif (board[2] == board[4] && board[4] == board[6]) && board.values_at(2, 4, 6).include?(player)
-      true
-    end
-  end
 end
-# rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/AbcSize
+# rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 game = Game.new
 game.welcome
 game.user_input
