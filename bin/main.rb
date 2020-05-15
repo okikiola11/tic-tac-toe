@@ -13,8 +13,16 @@ class Game
     puts 'Welcome to Tic Tac Toe'
     puts 'Please Enter your name (Player 1): '
     player1 = gets.strip.upcase
+    until /\S/ =~ player1
+      puts 'Player 1: Enter Valid name'
+      player1 = gets.chomp
+    end
     puts 'Please Enter your name (Player 2): '
     player2 = gets.strip.upcase
+    until /\S/ =~ player2
+      puts 'Player 2: Enter Valid name'
+      player2 = gets.chomp
+    end
     puts "#{player1} is 'X' (player1) and #{player2} is 'O' (player2)"
   end
 
