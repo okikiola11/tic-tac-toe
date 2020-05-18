@@ -38,7 +38,8 @@ class PlayGame
     puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
   end
 
-  def user_input
+  def play
+    welcome
     wins = Wins.new
     game_over = false
     display_board
@@ -79,12 +80,11 @@ class PlayGame
     player_response = gets.chomp.downcase
     return game_over if player_response != 'yes'
 
-    play.user_input
+    play.play
     play.play_again
   end
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 game = PlayGame.new
-game.welcome
-game.user_input
+game.play
 game.play_again
