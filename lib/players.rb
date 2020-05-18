@@ -16,6 +16,4 @@ class Players
   def validate_name(player)
     true if /\S/ =~ player
   end
-
-
 end
