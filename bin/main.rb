@@ -4,9 +4,9 @@ require_relative '../lib/wins.rb'
 require_relative '../lib/players.rb'
 require_relative '../lib/game.rb'
 
-include Game
-
 class PlayGame
+  include Game
+
   def initialize
     @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
     @playerz = Players.new
@@ -71,8 +71,20 @@ class PlayGame
       display_board
     end
   end
+
+  def play_again
+    play = PlayGame.new
+    game_over = true
+    puts 'Would you like to restart the game (Yes/No)'
+    player_response = gets.chomp.downcase
+    return game_over if player_response != 'yes'
+
+    play.user_input
+    play.play_again
+  end
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 game = PlayGame.new
 game.welcome
 game.user_input
+game.play_again
