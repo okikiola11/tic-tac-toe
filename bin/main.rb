@@ -2,8 +2,11 @@
 # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 require_relative '../lib/wins.rb'
 require_relative '../lib/players.rb'
+require_relative '../lib/game.rb'
 
-class Game
+include Game
+
+class PlayGame
   def initialize
     @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
     @playerz = Players.new
@@ -12,18 +15,19 @@ class Game
   def welcome
     puts 'Welcome to Tic Tac Toe'
     puts 'Please Enter your name (Player 1): '
-    player1 = gets.strip.upcase
-    until /\S/ =~ player1
+    player1_name = gets.strip.upcase
+    until @playerz.validate_name(player1_name)
       puts 'Player 1: Enter Valid name'
-      player1 = gets.chomp
+      player1_name = gets.chomp.upcase
     end
     puts 'Please Enter your name (Player 2): '
-    player2 = gets.strip.upcase
-    until /\S/ =~ player2
+    player2_name = gets.strip.upcase
+    until @playerz.validate_name(player2_name)
       puts 'Player 2: Enter Valid name'
-      player2 = gets.chomp
+      player2_name = gets.chomp.upcase
     end
-    puts "#{player1} is 'X' (player1) and #{player2} is 'O' (player2)"
+    @playerz.player(player1_name, player2_name)
+    puts "#{player1_name} is 'X' (player1) and #{player2_name} is 'O' (player2)"
   end
 
   def display_board
@@ -32,30 +36,6 @@ class Game
     puts " #{@board[3]} | #{@board[4]} | #{@board[5]} "
     puts '----------- '
     puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
-  end
-
-  def input_to_index(user_input)
-    user_input.to_i - 1
-  end
-
-  def move(board, index, player)
-    board[index] = player
-  end
-
-  def valid_move?(board, index)
-    return true if index.between?(0, 8) && board[index] == ' '
-  end
-
-  def turn_count(board)
-    counter = 0
-    board.each do |spaces|
-      counter += 1 if spaces.include?(@playerz.player1) || spaces.include?(@playerz.player2)
-    end
-    counter
-  end
-
-  def current_player
-    turn_count(@board).even? ? @playerz.player1 : @playerz.player2
   end
 
   def user_input
@@ -69,7 +49,7 @@ class Game
         puts 'Invalid move, number already taken or out of range'
       else
         move(@board, input, current_player)
-        if wins.won?(@board, @playerz.player1)
+        if wins.won?(@board, 'X')
           display_board
           puts "#{@playerz.player1} won the game!"
           return game_over = true
@@ -78,7 +58,7 @@ class Game
           puts 'It\'s a Draw!'
           return game_over = true
         end
-        if wins.won?(@board, @playerz.player2)
+        if wins.won?(@board, 'O')
           display_board
           puts "#{@playerz.player2} won the game!"
           return game_over = true
@@ -93,6 +73,6 @@ class Game
   end
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-game = Game.new
+game = PlayGame.new
 game.welcome
 game.user_input
