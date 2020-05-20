@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
-# rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+# rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/BlockNesting
 require_relative '../lib/players.rb'
 require_relative '../lib/game.rb'
-
-include Util
 
 @game = Game.new
 @playerz = Players.new
@@ -32,21 +30,19 @@ def play
   puts @game.display_board
   until game_over == true
     puts 'Select a number between 1-9'
-    input = input_to_index(gets.chomp)
+    input = @game.input_to_index(gets.chomp)
     if !@game.valid_move?(input)
       puts 'Invalid move, number already taken or out of range'
     else
       @game.move(input, @game.current_player)
       if @game.won?
         if @game.current_player == 'O'
-          puts @game.display_board
           puts "#{@playerz.player1} won the game!"
-          return game_over == true
         else
-          puts @game.display_board
           puts "#{@playerz.player2} won the game!"
-          return game_over == true
         end
+        puts @game.display_board
+        return game_over == true
       elsif !@game.board.include?(' ')
         puts @game.display_board
         puts 'It\'s a Draw!'
@@ -63,9 +59,10 @@ def play_again
   puts 'Would you like to restart the game (Yes/No)'
   player_response = gets.chomp.downcase
   return game_over if player_response != 'yes'
+
   @game.empty_board
   play
   play_again
 end
 play_again
-# rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+# rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/BlockNesting

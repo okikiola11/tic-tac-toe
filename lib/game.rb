@@ -1,9 +1,3 @@
-module Util
-  def input_to_index(user_input)
-    user_input.to_i - 1
-  end
-end
-
 class Game
   def initialize
     @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
@@ -12,20 +6,24 @@ class Game
   attr_reader :board
 
   def display_board
-    display = [
-    [" #{@board[0]} | #{@board[1]} | #{@board[2]} "],
-    ['----------- '],
-    [" #{@board[3]} | #{@board[4]} | #{@board[5]} "],
-    ['----------- '],
-    [" #{@board[6]} | #{@board[7]} | #{@board[8]} "]
+    [
+      [" #{@board[0]} | #{@board[1]} | #{@board[2]} "],
+      ['----------- '],
+      [" #{@board[3]} | #{@board[4]} | #{@board[5]} "],
+      ['----------- '],
+      [" #{@board[6]} | #{@board[7]} | #{@board[8]} "]
     ]
+  end
+
+  def input_to_index(user_input)
+    user_input.to_i - 1
   end
 
   def valid_move?(index)
     return true if index.between?(0, 8) && @board[index] == ' '
   end
 
-  def turn_count(board)
+  def turn_count(_board)
     counter = 0
     @board.each do |spaces|
       counter += 1 if spaces.include?('X') || spaces.include?('O')
@@ -41,6 +39,7 @@ class Game
     @board[index] = player
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def won?
     if (@board[0] == @board[1] && @board[1] == @board[2]) && !@board.values_at(0, 1, 2).include?(' ')
       true
@@ -60,6 +59,7 @@ class Game
       true
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def empty_board
     @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
