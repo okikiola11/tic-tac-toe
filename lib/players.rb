@@ -13,7 +13,13 @@ class Players
     @player2 = player2
   end
 
-  def validate_name(player)
-    true if /\S/ =~ player
+  def empty_name(player)
+    return true if /\S/ =~ player
+
+    false
+  end
+
+  def unique_name(player1, player2)
+    true if player1 != player2
   end
 end

@@ -7,21 +7,19 @@ require_relative '../lib/game.rb'
 @playerz = Players.new
 
 def welcome
+  player_obj = []
+  @player = 1
+  @passed = false
   puts 'Welcome to Tic Tac Toe'
-  puts 'Please Enter your name (Player 1): '
-  player1_name = gets.strip.upcase
-  until @playerz.validate_name(player1_name)
-    puts 'Player 1: Enter Valid name'
-    player1_name = gets.chomp.upcase
+  until @player == 3
+    puts "Please Enter a unique name (Player #{@player}): "
+    player_obj[@player] = gets.chomp.upcase
+    @passed = @playerz.empty_name(player_obj[@player]) && @playerz.unique_name(player_obj[1], player_obj[2])
+    @player += 1 if @passed == true
+    @passed = false
   end
-  puts 'Please Enter your name (Player 2): '
-  player2_name = gets.strip.upcase
-  until @playerz.validate_name(player2_name)
-    puts 'Player 2: Enter Valid name'
-    player2_name = gets.chomp.upcase
-  end
-  @playerz.player(player1_name, player2_name)
-  puts "#{player1_name} is 'X' (player1) and #{player2_name} is 'O' (player2)"
+  @playerz.player(player_obj[1], player_obj[2])
+  puts "#{player_obj[1]} is 'X' (player1) and #{player_obj[2]} is 'O' (player2)"
 end
 
 def play
@@ -58,7 +56,7 @@ def play_again
   game_over = true
   puts 'Would you like to restart the game (Yes/No)'
   player_response = gets.chomp.downcase
-  return game_over if player_response != 'yes'
+  return game_over if player_response == 'no'
 
   @game.empty_board
   play
