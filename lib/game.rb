@@ -1,67 +1,70 @@
+require_relative '../lib/players.rb'
+require_relative '../lib/board.rb'
+
 class Game
-  def initialize
-    @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+  def initialize(player1 = 'player1', player2 = 'player2')
+    @board = Board.new
+    @playerz = Players.new
+    @playerz.player(player1, player2)
   end
 
-  attr_reader :board
-
-  def display_board
-    [
-      [" #{@board[0]} | #{@board[1]} | #{@board[2]} "],
-      ['----------- '],
-      [" #{@board[3]} | #{@board[4]} | #{@board[5]} "],
-      ['----------- '],
-      [" #{@board[6]} | #{@board[7]} | #{@board[8]} "]
-    ]
-  end
+  attr_reader :board, :playerz
 
   def input_to_index(user_input)
     user_input.to_i - 1
   end
 
   def valid_move?(index)
-    return true if index.between?(0, 8) && @board[index] == ' '
+    return true if index.between?(0, 8) && @board.board_cells[index] == ' '
   end
 
   def turn_count(_board)
     counter = 0
-    @board.each do |spaces|
+    @board.board_cells.each do |spaces|
       counter += 1 if spaces.include?('X') || spaces.include?('O')
     end
     counter
   end
 
   def current_player
-    turn_count(@board).even? ? 'X' : 'O'
+    turn_count(@board.board_cells).even? ? 'X' : 'O'
   end
 
   def move(index, player)
-    @board[index] = player
+    @board.board_cells[index] = player
+  end
+
+  def check_players_turn
+    if current_player == 'X'
+      return "#{@playerz.player1}: It's your turn to play"
+    else current_player == '0'
+      return "#{@playerz.player2}: It's your turn to play"
+    end
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def won?
-    if (@board[0] == @board[1] && @board[1] == @board[2]) && !@board.values_at(0, 1, 2).include?(' ')
+    if (@board.board_cells[0] == @board.board_cells[1] && @board.board_cells[1] == @board.board_cells[2]) && !@board.board_cells.values_at(0, 1, 2).include?(' ')
       true
-    elsif (@board[3] == @board[4] && @board[4] == @board[5]) && !@board.values_at(3, 4, 5).include?(' ')
+    elsif (@board.board_cells[3] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[5]) && !@board.board_cells.values_at(3, 4, 5).include?(' ')
       true
-    elsif (@board[6] == @board[7] && @board[7] == @board[8]) && !@board.values_at(6, 7, 8).include?(' ')
+    elsif (@board.board_cells[6] == @board.board_cells[7] && @board.board_cells[7] == @board.board_cells[8]) && !@board.board_cells.values_at(6, 7, 8).include?(' ')
       true
-    elsif (@board[0] == @board[3] && @board[3] == @board[6]) && !@board.values_at(0, 3, 6).include?(' ')
+    elsif (@board.board_cells[0] == @board.board_cells[3] && @board.board_cells[3] == @board.board_cells[6]) && !@board.board_cells.values_at(0, 3, 6).include?(' ')
       true
-    elsif (@board[1] == @board[4] && @board[4] == @board[7]) && !@board.values_at(1, 4, 7).include?(' ')
+    elsif (@board.board_cells[1] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[7]) && !@board.board_cells.values_at(1, 4, 7).include?(' ')
       true
-    elsif (@board[2] == @board[5] && @board[5] == @board[8]) && !@board.values_at(2, 5, 8).include?(' ')
+    elsif (@board.board_cells[2] == @board.board_cells[5] && @board.board_cells[5] == @board.board_cells[8]) && !@board.board_cells.values_at(2, 5, 8).include?(' ')
       true
-    elsif (@board[0] == @board[4] && @board[4] == @board[8]) && !@board.values_at(0, 4, 8).include?(' ')
+    elsif (@board.board_cells[0] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[8]) && !@board.board_cells.values_at(0, 4, 8).include?(' ')
       true
-    elsif (@board[2] == @board[4] && @board[4] == @board[6]) && !@board.values_at(2, 4, 6).include?(' ')
+    elsif (@board.board_cells[2] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[6]) && !@board.board_cells.values_at(2, 4, 6).include?(' ')
       true
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def empty_board
-    @board = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+    @board.board_cells = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
   end
 end

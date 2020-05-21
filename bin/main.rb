@@ -2,8 +2,8 @@
 # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/BlockNesting
 require_relative '../lib/players.rb'
 require_relative '../lib/game.rb'
+require_relative '../lib/board.rb'
 
-@game = Game.new
 @playerz = Players.new
 
 def welcome
@@ -18,36 +18,38 @@ def welcome
     @player += 1 if @passed == true
     @passed = false
   end
-  @playerz.player(player_obj[1], player_obj[2])
+  @game = Game.new(player_obj[1], player_obj[2])
   puts "#{player_obj[1]} is 'X' (player1) and #{player_obj[2]} is 'O' (player2)"
 end
 
 def play
   welcome
   game_over = false
-  puts @game.display_board
+  puts @game.board.display_board
   until game_over == true
     puts 'Select a number between 1-9'
     input = @game.input_to_index(gets.chomp)
+    puts @game.check_players_turn
+    
     if !@game.valid_move?(input)
       puts 'Invalid move, number already taken or out of range'
     else
       @game.move(input, @game.current_player)
       if @game.won?
         if @game.current_player == 'O'
-          puts "#{@playerz.player1} won the game!"
+          puts "#{@game.playerz.player1} won the game!"
         else
-          puts "#{@playerz.player2} won the game!"
+          puts "#{@game.playerz.player2} won the game!"
         end
-        puts @game.display_board
+        puts @game.board.display_board
         return game_over == true
-      elsif !@game.board.include?(' ')
-        puts @game.display_board
+      elsif !@game.board.board_cells.include?(' ')
+        puts @game.board.display_board
         puts 'It\'s a Draw!'
         return game_over == true
       end
     end
-    puts @game.display_board
+    puts @game.board.display_board
   end
 end
 play
@@ -56,11 +58,22 @@ def play_again
   game_over = true
   puts 'Would you like to restart the game (Yes/No)'
   player_response = gets.chomp.downcase
-  return game_over if player_response == 'no'
-
+  until player_response == 'no' || player_response == 'yes'
+    puts 'Would you like to restart the game (Yes/No)'
+    player_response = gets.chomp.downcase
+  end
+  return game_over unless player_response == 'yes'
   @game.empty_board
   play
   play_again
+   
+  unless player_response == 'no'
+    game_over = true
+  else 
+    puts 'Your response should be either Yes/No'
+    @game.empty_board
+    play_again
+  end
 end
 play_again
 # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/BlockNesting
