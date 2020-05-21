@@ -36,9 +36,9 @@ class Game
 
   def check_players_turn
     if current_player == 'X'
-      return "#{@playerz.player1}: It's your turn to play"
+      "#{@playerz.player1}: It's your turn to play"
     else current_player == '0'
-      return "#{@playerz.player2}: It's your turn to play"
+         "#{@playerz.player2}: It's your turn to play"
     end
   end
 

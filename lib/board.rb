@@ -1,5 +1,5 @@
 class Board
-  def initialize 
+  def initialize
     @board_cells = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
   end
 

@@ -30,7 +30,7 @@ def play
     puts 'Select a number between 1-9'
     input = @game.input_to_index(gets.chomp)
     puts @game.check_players_turn
-    
+
     if !@game.valid_move?(input)
       puts 'Invalid move, number already taken or out of range'
     else
@@ -66,10 +66,8 @@ def play_again
   @game.empty_board
   play
   play_again
-   
-  unless player_response == 'no'
-    game_over = true
-  else 
+
+  if player_response == 'no'
     puts 'Your response should be either Yes/No'
     @game.empty_board
     play_again
