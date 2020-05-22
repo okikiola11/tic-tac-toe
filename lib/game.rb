@@ -37,12 +37,36 @@ class Game
   def check_players_turn
     if current_player == 'X'
       "#{@playerz.player1}: It's your turn to play"
-    else current_player == '0'
-         "#{@playerz.player2}: It's your turn to play"
+    elsif current_player == '0'
+      "#{@playerz.player2}: It's your turn to play"
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def check_win
+    if won?
+      check_winner
+    elsif full_board?
+      'It\'s a Draw!'
+    end
+  end
+
+  def check_winner
+    if current_player == 'O'
+      "#{playerz.player1} won the game!"
+    else
+      "#{playerz.player2} won the game!"
+    end
+  end
+
+  def full_board?
+    true unless @board.board_cells.include?(' ')
+  end
+
+  def game_over?
+    true if full_board? || won?
+  end
+
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Layout/LineLength
   def won?
     if (@board.board_cells[0] == @board.board_cells[1] && @board.board_cells[1] == @board.board_cells[2]) && !@board.board_cells.values_at(0, 1, 2).include?(' ')
       true
@@ -62,7 +86,7 @@ class Game
       true
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Layout/LineLength
 
   def empty_board
     @board.board_cells = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
