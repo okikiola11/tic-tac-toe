@@ -6,6 +6,16 @@ class Game
     @board = Board.new
     @playerz = Players.new
     @playerz.player(player1, player2)
+    @win_combinations = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [6, 4, 2]
+    ]
   end
 
   attr_reader :board, :playerz
@@ -37,9 +47,20 @@ class Game
   def check_players_turn
     if current_player == 'X'
       "#{@playerz.player1}: It's your turn to play"
-    elsif current_player == '0'
+    elsif current_player == 'O'
       "#{@playerz.player2}: It's your turn to play"
     end
+  end
+
+  def won?
+    win = false
+    @win_combinations.each do |combination|
+      place1 = @board.board_cells[combination[0]]
+      place2 = @board.board_cells[combination[1]]
+      place3 = @board.board_cells[combination[2]]
+      win = place1 if place1 == place2 && place2 == place3 && place1 != ' '
+    end
+    win
   end
 
   def check_win
@@ -65,28 +86,6 @@ class Game
   def game_over?
     true if full_board? || won?
   end
-
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Layout/LineLength
-  def won?
-    if (@board.board_cells[0] == @board.board_cells[1] && @board.board_cells[1] == @board.board_cells[2]) && !@board.board_cells.values_at(0, 1, 2).include?(' ')
-      true
-    elsif (@board.board_cells[3] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[5]) && !@board.board_cells.values_at(3, 4, 5).include?(' ')
-      true
-    elsif (@board.board_cells[6] == @board.board_cells[7] && @board.board_cells[7] == @board.board_cells[8]) && !@board.board_cells.values_at(6, 7, 8).include?(' ')
-      true
-    elsif (@board.board_cells[0] == @board.board_cells[3] && @board.board_cells[3] == @board.board_cells[6]) && !@board.board_cells.values_at(0, 3, 6).include?(' ')
-      true
-    elsif (@board.board_cells[1] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[7]) && !@board.board_cells.values_at(1, 4, 7).include?(' ')
-      true
-    elsif (@board.board_cells[2] == @board.board_cells[5] && @board.board_cells[5] == @board.board_cells[8]) && !@board.board_cells.values_at(2, 5, 8).include?(' ')
-      true
-    elsif (@board.board_cells[0] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[8]) && !@board.board_cells.values_at(0, 4, 8).include?(' ')
-      true
-    elsif (@board.board_cells[2] == @board.board_cells[4] && @board.board_cells[4] == @board.board_cells[6]) && !@board.board_cells.values_at(2, 4, 6).include?(' ')
-      true
-    end
-  end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Layout/LineLength
 
   def empty_board
     @board.board_cells = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']

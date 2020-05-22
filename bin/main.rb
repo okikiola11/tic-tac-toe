@@ -23,6 +23,7 @@ end
 
 def play
   welcome
+  puts @game.board.display_board
   until @game.game_over?
     puts @game.check_players_turn
     puts 'Select a number between 1-9'
