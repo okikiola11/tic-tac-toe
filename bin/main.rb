@@ -66,12 +66,6 @@ def play_again
   @game.empty_board
   play
   play_again
-
-  if player_response == 'no'
-    puts 'Your response should be either Yes/No'
-    @game.empty_board
-    play_again
-  end
 end
 play_again
 # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity, Metrics/BlockNesting
