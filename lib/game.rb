@@ -71,15 +71,15 @@ class Game
     end
   end
 
-  def check_winner
+  private def check_winner
     if current_player == 'O'
       "#{playerz.player1} won the game!"
     else
       "#{playerz.player2} won the game!"
     end
   end
-
-  def full_board?
+  
+  private def full_board?
     @board.board_cells.none?(' ')
   end
 
