@@ -80,7 +80,7 @@ class Game
   end
 
   def full_board?
-    true unless @board.board_cells.include?(' ')
+    @board.board_cells.none?(' ')
   end
 
   def game_over?
