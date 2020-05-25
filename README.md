@@ -11,6 +11,8 @@ The algorithm behind this game, is similar to how the game is played in real lif
  - Run a loop where if either player X or O wins it displays the player that won 
  - Inside the same loop, if it's a draw it displays the result as well.
 
+![screenshot](screenshot.png)
+
 ## Game Instructions
 
 - Execute main.rb file from bin directory.
