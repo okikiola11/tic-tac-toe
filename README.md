@@ -1,6 +1,6 @@
 # Tic Tac Toe
 
-In this project, we collaboratively build a Tic Tac Toe game using the main concepts of Object Oriented Programming. Particularly, classes and access to their attributes. 
+In this project, we collaboratively build a Tic Tac Toe game using the main concepts of Object-Oriented Programming. Particularly, classes and access to their attributes. 
 In more details, there are 4 milestones in this project. 
 - The first Milestone: In this session, we setup the executable file running it through a directory path i.e ruby bin/main.rb. Also, we setup the linting files.
 - The second Milestone: In this session, we mapped out the user-interface of the whole project. It describes briefly how the project will be played, the game loop and the implementation was done in one file (bin/main.rb) without classes.
